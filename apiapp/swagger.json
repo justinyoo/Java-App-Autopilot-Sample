@@ -1,0 +1,44 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Sample Azure Functions API"
+  },
+  "schemes": [
+    "http"
+  ],
+  "host": "localhost:7071",
+  "basePath": "/api",
+  "paths": {
+    "/ping": {
+      "get": {
+        "tags": [
+          "greeting"
+        ],
+        "summary": "Say hello",
+        "description": "",
+        "operationId": "ping",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
