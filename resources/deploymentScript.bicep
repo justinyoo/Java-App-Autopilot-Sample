@@ -43,7 +43,7 @@ var deploymentScript = {
     resourceName: name
     containerGroupName: 'contgrp-${name}'
     azureCliVersion: azureCliVersion
-    scriptUri: 'https://raw.githubusercontent.com/justinyoo/Java-App-Autopilot-Sample/main/Resources/setup-apim.sh'
+    scriptUri: 'https://raw.githubusercontent.com/justinyoo/Java-App-Autopilot-Sample/main/resources/setup-apim.sh'
 }
 
 resource ds 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
