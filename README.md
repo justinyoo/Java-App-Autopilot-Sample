@@ -22,6 +22,7 @@ Before changing any codebase, you should have the entire application architectur
 2. Visit the following URLs to check whether all the apps have been properly provisioned and deployed.
 
     * `https://apim-<AZURE_RESOURCE_NAME>.azure-api.net/java/ping?name=<YOUR_NAME>`
+    * `https://apim-<AZURE_RESOURCE_NAME>.azure-api.net/java/swagger.json`
 
 
 ## Getting Started &ndash; CI/CD Pipeine ##
