@@ -71,6 +71,7 @@ resource ds 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
             }
         ]
         primaryScriptUri: deploymentScript.scriptUri
+        cleanupPreference: 'OnExpiration'
         retentionInterval: 'P1D'
     }
 }
