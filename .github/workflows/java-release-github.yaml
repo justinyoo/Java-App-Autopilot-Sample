@@ -9,9 +9,6 @@ on:
       api_name:
         type: string
         required: true
-      suffix:
-        type: string
-        required: true
     secrets:
       GH_TOKEN:
         required: true
