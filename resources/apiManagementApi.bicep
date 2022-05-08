@@ -1,4 +1,5 @@
 param name string
+param suffix string = ''
 param location string = resourceGroup().location
 
 @allowed([
@@ -42,8 +43,15 @@ param apiMgmtApiPolicyValue string = '<!--\r\n  IMPORTANT:\r\n  - Policy element
 
 param apiMgmtProductName string = 'default'
 
+var resourceGrp = {
+    name: 'rg-${name}'
+}
+
+var functionApp = {
+    name: suffix == '' ? 'fncapp-${name}' : 'fncapp-${name}-${suffix}'
+}
+
 var apiManagement = {
-    groupName: 'rg-${name}'
     name: 'apim-${name}'
     location: location
     type: apiMgmtApiType
@@ -59,9 +67,14 @@ var apiManagement = {
     productName: apiMgmtProductName
 }
 
+resource fncapp 'Microsoft.Web/sites@2021-02-01' existing = {
+    name: functionApp.name
+    scope: resourceGroup(resourceGrp.name)
+}
+
 resource apim 'Microsoft.ApiManagement/service@2021-08-01' existing = {
     name: apiManagement.name
-    scope: resourceGroup(apiManagement.groupName)
+    scope: resourceGroup(resourceGrp.name)
 }
 
 resource apimapi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
@@ -70,6 +83,7 @@ resource apimapi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
         type: apiManagement.type
         displayName: apiManagement.displayName
         description: apiManagement.description
+        serviceUrl: 'https://${fncapp.properties.defaultHostName}/api'
         path: apiManagement.path
         subscriptionRequired: apiManagement.subscriptionRequired
         format: apiManagement.format

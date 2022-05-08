@@ -37,7 +37,6 @@ module fncapps './provision-functionapp.bicep' = [for (suffix, i) in suffixes: {
         name: name
         suffix: suffix
         location: location
-        consumptionPlanIsLinux: true
         functionWorkerRuntime: functionWorkerRuntimes[i]
     }
 }]
