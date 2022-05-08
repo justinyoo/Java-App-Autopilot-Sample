@@ -6,7 +6,6 @@ param apis array = [
         displayName: 'Java Function API'
         description: 'Java Function API'
         path: 'java'
-        suffix: '2022'
     }
 ]
 
