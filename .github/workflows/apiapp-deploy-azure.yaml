@@ -1,0 +1,24 @@
+name: 'Build and Deploy to Azure'
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  call_java_build:
+    uses: ./.github/workflows/java-build.yaml@main
+    with:
+      job_name: 'API Build'
+      api_name: 'apiapp'
+
+  call_java_deploy_azure:
+    uses: ./.github/workflows/java-deploy-azure.yaml@main
+    needs: call_java_build
+    with:
+      job_name: 'API to Azure'
+      api_name: 'apiapp'
+      suffix: '2022'
+    secrets:
+      AZ_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      AZ_RESOURCE_NAME: '${{ secrets.AZURE_RESOURCE_NAME }}'

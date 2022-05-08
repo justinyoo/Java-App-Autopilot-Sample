@@ -1,0 +1,22 @@
+name: 'Build and Release to GitHub'
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  call_java_build:
+    uses: ./.github/workflows/java-build.yaml@main
+    with:
+      job_name: 'API Build'
+      api_name: 'apiapp'
+
+  call_java_release_github:
+    uses: ./.github/workflows/java-release-github.yaml@main
+    needs: call_java_build
+    with:
+      job_name: 'API to GitHub'
+      api_name: 'apiapp'
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,47 @@
+name: 'Java Release to GitHub'
+
+on:
+  workflow_call:
+    inputs:
+      job_name:
+        type: string
+        required: true
+      api_name:
+        type: string
+        required: true
+      suffix:
+        type: string
+        required: true
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  build_test_analyse:
+    name: ${{ inputs.job_name }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download FunctionApp artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: ${{ inputs.api_name }}_app
+        path: published/${{ inputs.api_name }}
+
+    - name: Zip FunctionApp artifact
+      shell: bash
+      run: |
+        cd published/${{ inputs.api_name }}
+        zip -qq -r ${{ inputs.api_name }}.zip .
+        cd $GITHUB_WORKSPACE
+
+        mv published/${{ inputs.api_name }}/${{ inputs.api_name }}.zip published/${{ inputs.api_name }}.zip
+
+    - name: Release FunctionApp artifacts to GitHub
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GH_TOKEN }}"
+        prerelease: false
+        files: |
+          published/${{ inputs.api_name }}.zip
