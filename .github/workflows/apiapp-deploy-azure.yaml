@@ -7,13 +7,13 @@ on:
 
 jobs:
   call_java_build:
-    uses: ./.github/workflows/java-build.yaml@main
+    uses: ./.github/workflows/java-build.yaml
     with:
       job_name: 'API Build'
       api_name: 'apiapp'
 
   call_java_deploy_azure:
-    uses: ./.github/workflows/java-deploy-azure.yaml@main
+    uses: ./.github/workflows/java-deploy-azure.yaml
     needs: call_java_build
     with:
       job_name: 'API to Azure'
