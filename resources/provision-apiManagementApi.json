@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.1.6515",
-      "templateHash": "18003189299336903239"
+      "templateHash": "14140153034421357955"
     }
   },
   "parameters": {
@@ -76,7 +76,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.6.1.6515",
-              "templateHash": "3597607343816076168"
+              "templateHash": "14922481753254906241"
             }
           },
           "parameters": {
@@ -177,7 +177,17 @@
               "policyFormat": "[parameters('apiMgmtApiPolicyFormat')]",
               "policyValue": "[parameters('apiMgmtApiPolicyValue')]",
               "productName": "[parameters('apiMgmtProductName')]"
-            }
+            },
+            "operations": [
+              {
+                "name": "swagger-json",
+                "displayName": "swagger.json",
+                "method": "GET",
+                "urlTemplate": "/swagger.json",
+                "policyFormat": "xml",
+                "policyValue": "<!--\r\n    IMPORTANT:\r\n    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.\r\n    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.\r\n    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.\r\n    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.\r\n    - To remove a policy, delete the corresponding policy statement from the policy document.\r\n    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.\r\n    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.\r\n    - Policies are applied in the order of their appearance, from the top down.\r\n    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.\r\n-->\r\n<policies>\r\n  <inbound>\r\n    <base />\r\n    <rewrite-uri template=\"/Java-App-Autopilot-Sample/main/apiapp/swagger.json\" copy-unmatched-params=\"true\" />\r\n    <set-backend-service base-url=\"https://raw.githubusercontent.com/justinyoo\" />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>"
+              }
+            ]
           },
           "resources": [
             {
@@ -205,6 +215,42 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', split(format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), '/')[0], split(format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), '/')[1])]"
+              ]
+            },
+            {
+              "copy": {
+                "name": "apimapioperations",
+                "count": "[length(variables('operations'))]"
+              },
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-08-01",
+              "name": "[format('{0}/{1}', format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), variables('operations')[copyIndex()].name)]",
+              "properties": {
+                "displayName": "[variables('operations')[copyIndex()].displayName]",
+                "method": "[variables('operations')[copyIndex()].method]",
+                "urlTemplate": "[variables('operations')[copyIndex()].urlTemplate]",
+                "templateParameters": [],
+                "responses": []
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', split(format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), '/')[0], split(format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), '/')[1])]"
+              ]
+            },
+            {
+              "copy": {
+                "name": "apimapioperationpolicies",
+                "count": "[length(variables('operations'))]"
+              },
+              "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+              "apiVersion": "2021-08-01",
+              "name": "[format('{0}/{1}/policy', format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), variables('operations')[copyIndex()].name)]",
+              "properties": {
+                "format": "[variables('operations')[copyIndex()].policyFormat]",
+                "value": "[variables('operations')[copyIndex()].policyValue]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', split(format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), '/')[0], split(format('{0}/{1}', variables('apiManagement').name, variables('apiManagement').apiName), '/')[1])]",
+                "apimapioperations"
               ]
             }
           ],
