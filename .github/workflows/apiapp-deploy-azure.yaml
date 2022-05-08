@@ -18,7 +18,7 @@ jobs:
     with:
       job_name: 'API to Azure'
       api_name: 'apiapp'
-      suffix: '2022'
+      suffix: 'api'
     secrets:
       AZ_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       AZ_RESOURCE_NAME: '${{ secrets.AZURE_RESOURCE_NAME }}'

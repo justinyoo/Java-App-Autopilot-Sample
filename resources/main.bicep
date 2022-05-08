@@ -1,7 +1,7 @@
 param name string
 param location string = resourceGroup().location
 param suffixes array = [
-    '2022'
+    'api'
 ]
 param apiManagementPublisherName string
 param apiManagementPublisherEmail string
