@@ -5,8 +5,11 @@ param suffixes array = [
 ]
 param apiManagementPublisherName string
 param apiManagementPublisherEmail string
-param functionWorkerRuntimes array = [
-    'java'
+param functionWorkers array = [
+    {
+        runtime: 'java'
+        version: 'v11'
+    }
 ]
 @allowed([
     'Device'
@@ -37,7 +40,8 @@ module fncapps './provision-functionapp.bicep' = [for (suffix, i) in suffixes: {
         name: name
         suffix: suffix
         location: location
-        functionWorkerRuntime: functionWorkerRuntimes[i]
+        functionWorkerRuntime: functionWorkers[i].runtime
+        functionWorkerVersion: functionWorkers[i].version
     }
 }]
 

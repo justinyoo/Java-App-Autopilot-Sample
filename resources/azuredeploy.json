@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.1.6515",
-      "templateHash": "17900967412911825625"
+      "templateHash": "14251361779985755862"
     }
   },
   "parameters": {
@@ -106,7 +106,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.6.1.6515",
-              "templateHash": "8378135983367287667"
+              "templateHash": "11024553646479394157"
             }
           },
           "parameters": {
@@ -129,10 +129,13 @@
             "apiManagementPublisherEmail": {
               "type": "string"
             },
-            "functionWorkerRuntimes": {
+            "functionWorkers": {
               "type": "array",
               "defaultValue": [
-                "java"
+                {
+                  "runtime": "java",
+                  "version": "v11"
+                }
               ]
             },
             "deploymentScriptPrincipalType": {
@@ -713,7 +716,10 @@
                     "value": "[parameters('location')]"
                   },
                   "functionWorkerRuntime": {
-                    "value": "[parameters('functionWorkerRuntimes')[copyIndex()]]"
+                    "value": "[parameters('functionWorkers')[copyIndex()].runtime]"
+                  },
+                  "functionWorkerVersion": {
+                    "value": "[parameters('functionWorkers')[copyIndex()].version]"
                   }
                 },
                 "template": {
